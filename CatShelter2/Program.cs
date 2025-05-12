@@ -17,13 +17,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole<IdType>>()
     .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IValidator<CreateViewModel>, CreateViewModelValidator>();
 builder.Services.AddScoped<IValidator<EditViewModel>, EditViewModelValidator>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ElevatedPrivileges",
+         policy => policy.RequireRole(["Admin", "Employee"]));
+    options.AddPolicy("Basic",
+        policy => policy.RequireRole(["Admin", "Employee", "User"]));
+});
 
 
 
@@ -45,6 +52,20 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+
+// using (var scope = app.Services.CreateScope())
+// {
+//     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<IdType>>>();
+//     string[] roleNames = { "Admin", "User", "Employee" };
+
+//     foreach (var roleName in roleNames)
+//     {
+//         if (!await roleManager.RoleExistsAsync(roleName))
+//         {
+//             await roleManager.CreateAsync(new IdentityRole<IdType>(roleName));
+//         }
+//     }
+// }
 
 app.MapStaticAssets();
 

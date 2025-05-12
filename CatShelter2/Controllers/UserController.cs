@@ -1,30 +1,36 @@
-﻿using CatShelter.Models;
+﻿using CatShelter.Data;
+using CatShelter.Models;
 using CatShelter.Services;
 using CatShelter.ViewModels.UserViewModels;
 using FluentValidation;
 using FluentValidation.Results;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CatShelter.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "Basic")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
         private readonly IValidator<CreateViewModel> _createValidator;
         private readonly IValidator<EditViewModel> _editValidator;
-        public UserController(IUserService userService, IValidator<CreateViewModel> createValidator, IValidator<EditViewModel> editValidator)
+        private readonly UserManager<User> _userManager;
+        public UserController(IUserService userService, IValidator<CreateViewModel> createValidator, IValidator<EditViewModel> editValidator
+            , UserManager<User> userManager)
         {
             _userService = userService;
             _createValidator = createValidator;
             _editValidator = editValidator;
+            _userManager = userManager;
         }
 
-      
+
 
         [AllowAnonymous]
         [HttpGet]
@@ -45,21 +51,25 @@ namespace CatShelter.Controllers
             return View(user.Adapt<UserViewModel>());
         }
 
+        [Authorize(Policy = "ElevatedPrivileges")]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-
+        
+        [Authorize(Policy = "ElevatedPrivileges")]
         [HttpPost]
         public IActionResult Create(CreateViewModel userViewModel)
         {
             ValidationResult result = _createValidator.Validate(userViewModel);
-            if (result.IsValid) {
+            if (result.IsValid)
+            {
                 Console.WriteLine("valid");
                 User user = userViewModel.Adapt<User>();
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 _userService.Insert(user);
+                _userManager.PasswordHasher.HashPassword(user, userViewModel.Password);
+                ManageRoles(user);
                 return Redirect($"/user/details/{user.Id}");
             }
             result.AddToModelState(this.ModelState);
@@ -75,21 +85,28 @@ namespace CatShelter.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(EditViewModel userViewModel)
+        public async Task<IActionResult> Edit(EditViewModel userViewModel)
         {
             ValidationResult result = _editValidator.Validate(userViewModel);
-            if (result.IsValid) {
-                User user = userViewModel.Adapt<User>();
-                if(!user.Password.IsNullOrEmpty()){
-                    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                }
-                _userService.Update(user);
+            if (result.IsValid)
+            {
+
+                User user = _userService.GetById(userViewModel.Id)!;
+                user.Name = userViewModel.Name;
+                user.Surname = userViewModel.Surname;
+                user.Email = userViewModel.Email;
+                user.PhoneNumber = userViewModel.PhoneNumber;
+                user.IsAdmin = userViewModel.IsAdmin;
+                user.IsEmployee = userViewModel.IsEmployee;
+                await _userManager.UpdateAsync(user);
+                ManageRoles(user);
                 return Redirect($"/user/details/{user.Id}");
             }
             result.AddToModelState(this.ModelState);
             return View(userViewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Delete(IdType id)
         {
@@ -109,6 +126,40 @@ namespace CatShelter.Controllers
             return View(_userService.GetAdmins().Select(x => x.Adapt<UserViewModel>()));
         }
 
+        private void ManageRoles(User user)
+        {
+            
+            if (user.IsAdmin)
+            {
+                AddRole(user.Id, "Admin");
+            }
+            if (user.IsEmployee)
+            {
+                AddRole(user.Id, "Employee");
+            }
+            AddRole(user.Id, "User");
+
+            if(!user.IsAdmin){
+                RemoveRole(user.Id, "Admin");
+            }
+            if(!user.IsEmployee){
+                RemoveRole(user.Id, "Employee");
+            }
+        }
+        private void AddRole(IdType userId, string role){
+            var roleId = _userService.GetRoleId(role);
+                var hasRole = _userService.GetUserRole(userId, roleId);
+                if(hasRole == null){
+                    _userService.AddUserRole(userId, roleId);
+                }
+        }
+        private void RemoveRole(IdType userId, string role){
+            var roleId = _userService.GetRoleId(role);
+            var hasRole = _userService.GetUserRole(userId, roleId);
+                if(hasRole != null){
+                    _userService.RemoveUserRole(userId, roleId);
+                }
+        }
     }
     public static class Extensions
     {

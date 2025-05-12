@@ -1,4 +1,6 @@
-﻿namespace CatShelter.Repository
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace CatShelter.Repository
 {
     public interface IRepository<T>
     {
@@ -8,5 +10,9 @@
         void Update(T entity);
         void Delete(IdType id);
         void Save();
+        void AddUserRole(IdType userId, IdType roleId);
+        IdentityUserRole<IdType>? GetUserRole (IdType userId, IdType roleId);
+        IdType GetRoleId(string role);
+        void RemoveUserRole(IdType userId, IdType roleId);
     }
 }
