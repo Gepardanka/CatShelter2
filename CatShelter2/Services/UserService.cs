@@ -1,5 +1,6 @@
 ﻿using CatShelter.Models;
 using CatShelter.Repository;
+using Microsoft.AspNetCore.Identity;
 
 namespace CatShelter.Services
 {
@@ -59,6 +60,21 @@ namespace CatShelter.Services
         public void Update(User user)
         {
             _repository.Update(user);
+            _repository.Save();
+        }
+
+        public void AddUserRole(IdType userId, IdType roleId){
+            _repository.AddUserRole(userId, roleId);
+            _repository.Save();
+        }
+        public IdentityUserRole<IdType>? GetUserRole (IdType userId, IdType roleId){
+            return _repository.GetUserRole(userId, roleId);
+        }
+        public IdType GetRoleId(string role){
+            return _repository.GetRoleId(role);
+        }
+        public void RemoveUserRole(IdType userId, IdType roleId){
+            _repository.RemoveUserRole(userId, roleId);
             _repository.Save();
         }
     }

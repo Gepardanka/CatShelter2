@@ -12,28 +12,14 @@ namespace CatShelter.ViewModels.UserViewModels
         public required string Name { get; set; }
         public required string Surname { get; set; }
         public required string Email { get; set; }
-        public required string Phone { get; set; }
-        [DataType(DataType.Password)]
-        public string Password { get; set; } = "";
+        public required string PhoneNumber { get; set; }
+
         [DisplayName("Admin")]
         public bool IsAdmin { get; set; }
         [DisplayName("Employee")]
         public bool IsEmployee { get; set; }
+        public string? ConcurrencyStamp { get; set; }
 
-        public static User ToUser(EditViewModel userViewModel)
-        {
-            return new User
-            {
-                Id = userViewModel.Id,
-                Name = userViewModel.Name,
-                Surname = userViewModel.Surname,
-                Email = userViewModel.Email,
-                Phone = userViewModel.Phone,
-                Password = userViewModel.Password,
-                IsAdmin = userViewModel.IsAdmin,
-                IsEmployee = userViewModel.IsEmployee
-            };
-        }
     }
 
     public class EditViewModelValidator : AbstractValidator<EditViewModel>
@@ -43,8 +29,8 @@ namespace CatShelter.ViewModels.UserViewModels
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Surname).NotEmpty();
             RuleFor(x => x.Email).EmailAddress();
-            RuleFor(x => x.Phone).NotEmpty();
-            RuleFor(x => x.Phone).Custom((phone, context) =>
+            RuleFor(x => x.PhoneNumber).NotEmpty();
+            RuleFor(x => x.PhoneNumber).Custom((phone, context) =>
             {
                 if (phone.IsNullOrEmpty()) { return; }
                 if (phone.Any(x => !char.IsAsciiDigit(x)))
@@ -52,23 +38,23 @@ namespace CatShelter.ViewModels.UserViewModels
                     context.AddFailure("A phone number must be digits only");
                 }
             });
-            When(x => !x.Password.IsNullOrEmpty(), () => {
-                RuleFor(x => x.Password).MinimumLength(8);
-                RuleFor(x => x.Password).Custom((password, context) => {
-                    if (!password.Any(x => char.IsLower(x)))
-                    {
-                        context.AddFailure("A password must contain a lower letter");
-                    }
-                    if (!password.Any(x => char.IsUpper(x)))
-                    {
-                        context.AddFailure("A password must contain an upper letter");
-                    }
-                    if (!password.Any(x => char.IsAsciiDigit(x)))
-                    {
-                        context.AddFailure("A password must contain a digit");
-                    }
-                });
-            });
+            //When(x => !x.Password.IsNullOrEmpty(), () => {
+            //    RuleFor(x => x.Password).MinimumLength(8);
+            //    RuleFor(x => x.Password).Custom((password, context) => {
+            //        if (!password.Any(x => char.IsLower(x)))
+            //        {
+            //            context.AddFailure("A password must contain a lower letter");
+            //        }
+            //        if (!password.Any(x => char.IsUpper(x)))
+            //        {
+            //            context.AddFailure("A password must contain an upper letter");
+            //        }
+            //        if (!password.Any(x => char.IsAsciiDigit(x)))
+            //        {
+            //            context.AddFailure("A password must contain a digit");
+            //        }
+            //    });
+            //});
 
         }
 

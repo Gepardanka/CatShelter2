@@ -12,7 +12,7 @@ namespace CatShelter.ViewModels.UserViewModels
         public string Name { get; set; } = "";
         public string Surname { get; set; } = "";
         public string Email { get; set; } = "";
-        public string Phone { get; set; } = "";
+        public string PhoneNumber { get; set; } = "";
         [DataType(DataType.Password)]
         public string Password { get; set; } = "";
         [DisplayName("Admin")]
@@ -28,7 +28,7 @@ namespace CatShelter.ViewModels.UserViewModels
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Surname).NotEmpty();
             RuleFor(x => x.Email).EmailAddress();
-            RuleFor(x => x.Phone).Custom((phone, context) =>
+            RuleFor(x => x.PhoneNumber).Custom((phone, context) =>
             {
                 if (phone.IsNullOrEmpty()) { return; }
                 if (phone.Any(x => !char.IsAsciiDigit(x)))
@@ -36,7 +36,7 @@ namespace CatShelter.ViewModels.UserViewModels
                     context.AddFailure("A phone number must be digits only");
                 }
             });
-            RuleFor(x => x.Phone).NotEmpty();
+            RuleFor(x => x.PhoneNumber).NotEmpty();
             RuleFor(x => x.Password).NotEmpty();
             RuleFor(x => x.Password).MinimumLength(8);
             RuleFor(x => x.Password).Custom((password, context) => {

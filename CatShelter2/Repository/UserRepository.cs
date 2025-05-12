@@ -1,5 +1,6 @@
 ﻿using CatShelter.Data;
 using CatShelter.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -46,13 +47,29 @@ namespace CatShelter.Repository
 
         public void Update(User entity)
         {
-            if (string.IsNullOrEmpty(entity.Password))
+            if (string.IsNullOrEmpty(entity.PasswordHash))
             {
                 var inDb = GetById(entity.Id)!;
-                entity.Password = inDb.Password;
+                entity.PasswordHash = inDb.PasswordHash;
                 _context.Entry(inDb).State = EntityState.Detached;
             }
             _context.Entry(entity).State = EntityState.Modified;
         }
+        public void AddUserRole(IdType userId, IdType roleId)
+        {
+            _context.UserRoles.Add(new IdentityUserRole<IdType> { UserId = userId, RoleId = roleId });
+        }
+        public IdType GetRoleId(string roleName){
+            return _context.Roles.First(x => x.Name == roleName).Id;
+        }
+        public IdentityUserRole<IdType>? GetUserRole (IdType userId, IdType roleId){
+            return _context.UserRoles.FirstOrDefault(x => x.UserId == userId && x.RoleId == roleId);
+        }
+        public void RemoveUserRole(IdType userId, IdType roleId){
+            var userRole = GetUserRole(userId, roleId);
+            if(userRole == null){return;}
+            _context.UserRoles.Remove(userRole);
+        }
     }
+
 }

@@ -9,7 +9,7 @@ namespace CatShelter.ViewModels.UserViewModels
         public string Name { get; set; } = "";
         public string Surname { get; set; } = "";
         public string Email { get; set; } = "";
-        public string Phone { get; set; } = "";
+        public string PhoneNumber { get; set; } = "";
         [DisplayName("Admin")]
         public bool IsAdmin { get; set; }
         [DisplayName("Employee")]
