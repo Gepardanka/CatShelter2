@@ -1,5 +1,5 @@
 global using IdType = int;
-
+using CatShelter.Controllers;
 using CatShelter.Data;
 using CatShelter.Models;
 using CatShelter.Repository;
@@ -21,6 +21,11 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<AdoptionRepository>();
+builder.Services.AddScoped<IAdoptionService, AdoptionService>();
+builder.Services.AddScoped<AdoptionController>();
+
 builder.Services.AddScoped<IValidator<CreateViewModel>, CreateViewModelValidator>();
 builder.Services.AddScoped<IValidator<EditViewModel>, EditViewModelValidator>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

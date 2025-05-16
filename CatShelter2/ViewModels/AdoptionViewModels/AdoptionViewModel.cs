@@ -5,13 +5,10 @@ namespace CatShelter.ViewModels.AdoptionViewModels
 {
     public class AdoptionViewModel
     {
-        [Key]
-        public int Id { get; set; }
-        [ForeignKey("CatViewModel")]
-        public int? CatId { get; set; }
+        public IdType Id { get; set; }
+        public IdType? CatId { get; set; }
         public CatViewModels.CatViewModel? Cat { get; set; }
-        [ForeignKey("UserViewModel")]
-        public int? UserId { get; set; }
+        public IdType? UserId { get; set; }
         public UserViewModels.UserViewModel? User { get; set; }
         public DateOnly Date { get; set; }
         public AdoptionType AdoptionType { get; set; }
