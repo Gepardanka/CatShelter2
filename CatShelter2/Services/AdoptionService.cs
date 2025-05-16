@@ -1,4 +1,5 @@
 using CatShelter.Models;
+using CatShelter.Repository;
 namespace CatShelter.Services
 {
     public class AdoptionService : IAdoptionService
