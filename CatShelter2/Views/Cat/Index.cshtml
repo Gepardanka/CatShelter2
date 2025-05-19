@@ -1,0 +1,36 @@
+﻿@model CatShelter.ViewModels.CatViewModels.IndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .card-container{
+        display:flex; 
+        flex-wrap:wrap;
+    }
+    .card-margin{
+        margin:15px;
+    }
+</style>
+<h1>Cats</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div class="card-container">
+    @foreach(var item in Model.Cats)
+    {
+        <div class="card card-margin" style="width: 18rem;">
+            <img src="https://i.pinimg.com/236x/76/83/13/768313f932ade490a9f56587978335c7.jpg" class="card-img-top" alt="Cute cat picture">
+		<div class="card-body">
+			<h5 class="card-title">@item.Name</h5>
+			<p class="card-text">Age: @(DateTime.Now.Year - item.YearOfBirth)</p>
+            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+		</div>
+	</div>
+    }
+
+
+</div>

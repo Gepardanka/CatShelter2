@@ -7,7 +7,6 @@ namespace CatShelter.ViewModels.AdoptionViewModels
     }
     public class AdoptionFilter
     {
-        public bool OnlyTemporary { get; set; } = false;
-        public bool OnlyLongTerm { get; set; } = false;
+        public string Filter { get; set; } = "All";
     }
 }

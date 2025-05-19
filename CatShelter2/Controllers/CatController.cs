@@ -3,13 +3,16 @@ using CatShelter.Services;
 using CatShelter.ViewModels.CatViewModels;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 namespace CatShelter.Controllers{
     public class CatController : Controller
     {
-        readonly CatService _service;
-        public CatController(CatService service)
+        readonly ICatService _catService;
+        readonly IUserService _userService;
+        public CatController(ICatService service, IUserService userService)
         {
-            _service = service;
+            _catService = service;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -17,32 +20,37 @@ namespace CatShelter.Controllers{
         {
             return View(new IndexViewModel
             {
-                Cats = _service.GetAll().Select(x => x.Adapt<CatViewModel>()).ToList()
+                Cats = _catService.GetAll().Select(x => x.Adapt<CatViewModel>()).ToList()
             });
         }
         [HttpGet]
         public IActionResult Details(IdType id)
         {
-            var cat = _service.GetById(id);
+            var cat = _catService.GetById(id);
             if (cat == null) { return NotFound(); }
             return View(cat.Adapt<CatViewModel>());
         }
         [HttpGet]
         public IActionResult Create()
         {
+            ViewBag.CarerId = _userService.GetEmployees().Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString(),
+                Text = x.Email,
+            }).ToList();
             return View();
         }
         [HttpPost]
         public IActionResult Create(CatViewModel catViewModel)
         {
             var cat = catViewModel.Adapt<Cat>();
-            _service.Insert(cat);
-            return Redirect($"/adoption/details/{cat.Id}");
+            _catService.Insert(cat);
+            return Redirect($"/cat/details/{cat.Id}");
         }
         [HttpGet]
         public IActionResult Edit(IdType id)
         {
-            var cat = _service.GetById(id);
+            var cat = _catService.GetById(id);
             if (cat == null) { return NotFound(); }
             return View(cat.Adapt<CatViewModel>());
         }
@@ -50,13 +58,13 @@ namespace CatShelter.Controllers{
         public IActionResult Edit(CatViewModel catViewModel)
         {
             var cat = catViewModel.Adapt<Cat>();
-            _service.Update(cat);
-            return Redirect($"/adoption/details/{cat.Id}");
+            _catService.Update(cat);
+            return Redirect($"/cat/details/{cat.Id}");
         }
         [HttpGet]
         public IActionResult Delete(IdType id)
         {
-            _service.Delete(id);
+            _catService.Delete(id);
             return Redirect("/cat");
         }
     }

@@ -7,6 +7,7 @@ using CatShelter.Services;
 using CatShelter.ViewModels.UserViewModels;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -24,7 +25,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<AdoptionRepository>();
 builder.Services.AddScoped<IAdoptionService, AdoptionService>();
-builder.Services.AddScoped<AdoptionController>();
+builder.Services.AddScoped<CatRepository>();
+builder.Services.AddScoped<ICatService, CatService>();
 
 builder.Services.AddScoped<IValidator<CreateViewModel>, CreateViewModelValidator>();
 builder.Services.AddScoped<IValidator<EditViewModel>, EditViewModelValidator>();

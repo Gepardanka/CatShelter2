@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using CatShelter.Models;
 
 namespace CatShelter.ViewModels.AdoptionViewModels
 {
@@ -12,10 +13,5 @@ namespace CatShelter.ViewModels.AdoptionViewModels
         public UserViewModels.UserViewModel? User { get; set; }
         public DateOnly Date { get; set; }
         public AdoptionType AdoptionType { get; set; }
-    }
-    public enum AdoptionType
-    {
-        Temporary = 0,
-        LongTerm = 1
     }
 }

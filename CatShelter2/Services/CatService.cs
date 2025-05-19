@@ -13,6 +13,7 @@ namespace CatShelter.Services
         public void Delete(IdType id)
         {
             _repository.Delete(id);
+            _repository.Save();
         }
 
         public IQueryable<Cat> GetAll()
@@ -28,11 +29,13 @@ namespace CatShelter.Services
         public void Insert(Cat cat)
         {
             _repository.Insert(cat);
+            _repository.Save();
         }
 
         public void Update(Cat cat)
         {
             _repository.Update(cat);
+            _repository.Save();
         }
     }
 }

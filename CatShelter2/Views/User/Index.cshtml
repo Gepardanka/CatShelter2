@@ -1,10 +1,11 @@
-﻿@model CatShelter.ViewModels.UserViewModels.IndexViewModel
+﻿
+@model CatShelter.ViewModels.UserViewModels.IndexViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Users</h1>
 
 <style>
 .filter-container {
@@ -20,7 +21,7 @@
 }
 .clear-filter-form{
     position:absolute;
-    top:92px;
+    top:102px;
     left:80px;
 }
 </style>
@@ -58,7 +59,7 @@
     <a asp-action="Admins" style="margin-right:5px">Admins</a>
     <a asp-action="Employees">Employees</a>
 </p>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>

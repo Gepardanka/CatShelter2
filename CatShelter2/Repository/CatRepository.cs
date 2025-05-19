@@ -32,7 +32,9 @@ namespace CatShelter.Repository
 
         public Cat? GetById(IdType id)
         {
-            return _context.Cats.FirstOrDefault(x => x.Id == id);
+            return _context.Cats
+                .Include(x => x.Carer)
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public IdType GetRoleId(string role)
