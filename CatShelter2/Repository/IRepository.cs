@@ -10,9 +10,5 @@ namespace CatShelter.Repository
         void Update(T entity);
         void Delete(IdType id);
         void Save();
-        void AddUserRole(IdType userId, IdType roleId);
-        IdentityUserRole<IdType>? GetUserRole (IdType userId, IdType roleId);
-        IdType GetRoleId(string role);
-        void RemoveUserRole(IdType userId, IdType roleId);
     }
 }

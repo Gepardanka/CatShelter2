@@ -1,4 +1,3 @@
-using CatShelter.Repository;
 using CatShelter.Models;
 using Microsoft.AspNetCore.Identity;
 using CatShelter.Data;
@@ -13,10 +12,6 @@ namespace CatShelter.Repository
         {
             _context = context;
         }
-        public void AddUserRole(IdType userId, IdType roleId)
-        {
-            throw new NotImplementedException();
-        }
 
         public void Delete(IdType id)
         {
@@ -26,32 +21,20 @@ namespace CatShelter.Repository
 
         public IQueryable<Adoption> GetAll()
         {
-            return _context.Adoptions;
+            return _context.Adoptions.Include(x => x.User).Include(x => x.Cat);
         }
 
         public Adoption? GetById(IdType id)
         {
-            return _context.Adoptions.FirstOrDefault(x => x.Id == id);
-        }
-
-        public IdType GetRoleId(string role)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IdentityUserRole<IdType>? GetUserRole(IdType userId, IdType roleId)
-        {
-            throw new NotImplementedException();
+            return _context.Adoptions
+                .Include(x => x.Cat)
+                .Include(x => x.User)
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public void Insert(Adoption entity)
         {
             _context.Adoptions.Add(entity);
-        }
-
-        public void RemoveUserRole(IdType userId, IdType roleId)
-        {
-            throw new NotImplementedException();
         }
 
         public void Save()

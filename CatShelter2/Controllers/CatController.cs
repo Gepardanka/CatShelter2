@@ -4,20 +4,25 @@ using CatShelter.ViewModels.CatViewModels;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 namespace CatShelter.Controllers{
     public class CatController : Controller
     {
         readonly ICatService _catService;
         readonly IUserService _userService;
-        public CatController(ICatService service, IUserService userService)
+        readonly IStringLocalizer<CatController> _stringLocalizer;
+        public CatController(ICatService service, IUserService userService, IStringLocalizer<CatController> stringLocalizer)
         {
             _catService = service;
             _userService = userService;
+            _stringLocalizer = stringLocalizer;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
+            System.Console.WriteLine(_stringLocalizer["Hello"]);
+
             return View(new IndexViewModel
             {
                 Cats = _catService.GetAll().Select(x => x.Adapt<CatViewModel>()).ToList()
@@ -28,7 +33,27 @@ namespace CatShelter.Controllers{
         {
             var cat = _catService.GetById(id);
             if (cat == null) { return NotFound(); }
-            return View(cat.Adapt<CatViewModel>());
+            return View(new CatViewModel {
+                Id = cat.Id,
+                Adoptions = cat.Adoptions.Select(x => new CatShelter.ViewModels.AdoptionViewModels.AdoptionViewModel
+                {
+                    Id = x.Id,
+                    Date = x.Date,
+                    UserId = x.UserId,
+                    AdoptionType = x.AdoptionType
+                }).ToList(),
+                ArriveDate = cat.ArriveDate,
+                Carer = cat.Carer == null? null :
+                    new ViewModels.UserViewModels.UserViewModel
+                {
+                    Id = cat.Carer.Id,
+                    Email = cat.Carer.Email,
+                },
+                CarerId = cat.CarerId,
+                Name = cat.Name,
+                Picture = cat.Picture,
+                YearOfBirth = cat.YearOfBirth
+            });
         }
         [HttpGet]
         public IActionResult Create()

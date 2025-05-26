@@ -36,8 +36,6 @@ namespace CatShelter.Controllers
             return View(new IndexViewModel
             {
                 Adoptions = adoptions
-                    .Include(x => x.Cat)
-                    .Include(x => x.User)
                     .Select(x => new AdoptionViewModel
                     {
                         Id = x.Id,
@@ -74,7 +72,6 @@ namespace CatShelter.Controllers
             {
                 AvaliableCats = _catService
                     .GetAll()
-                    .Include(x => x.Adoptions)
                     .Where(x => x.Adoptions.Count == 0)
                     .Select(x => new CatList
                         {

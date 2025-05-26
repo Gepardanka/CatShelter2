@@ -1,5 +1,4 @@
 global using IdType = int;
-using CatShelter.Controllers;
 using CatShelter.Data;
 using CatShelter.Models;
 using CatShelter.Repository;
@@ -7,8 +6,11 @@ using CatShelter.Services;
 using CatShelter.ViewModels.UserViewModels;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Build.Framework;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using System.Globalization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,12 +22,13 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole<IdType>>()
     .AddEntityFrameworkStores<AppDbContext>();
-builder.Services.AddScoped<UserRepository>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddScoped<AdoptionRepository>();
+builder.Services.AddScoped<IRepository<Adoption>, AdoptionRepository>();
 builder.Services.AddScoped<IAdoptionService, AdoptionService>();
-builder.Services.AddScoped<CatRepository>();
+builder.Services.AddScoped<IRepository<Cat>, CatRepository>();
 builder.Services.AddScoped<ICatService, CatService>();
 
 builder.Services.AddScoped<IValidator<CreateViewModel>, CreateViewModelValidator>();
@@ -39,6 +42,10 @@ builder.Services.AddAuthorization(options =>
         policy => policy.RequireRole(["Admin", "Employee", "User"]));
 });
 
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddMvc()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
 
 
 var app = builder.Build();
@@ -59,6 +66,21 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+
+var supportedCultures = new[] { 
+    new CultureInfo("en-GB"), 
+    new CultureInfo("pl-PL"), 
+    new CultureInfo("pt-BR")
+};
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+localizationOptions.RequestCultureProviders.Insert(0, new QueryStringRequestCultureProvider());
+
+app.UseRequestLocalization(localizationOptions);
 
 // using (var scope = app.Services.CreateScope())
 // {

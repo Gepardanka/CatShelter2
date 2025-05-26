@@ -12,10 +12,6 @@ namespace CatShelter.Repository
         public CatRepository(AppDbContext context)
         {
             _context = context;
-         }
-        public void AddUserRole(IdType userId, IdType roleId)
-        {
-            throw new NotImplementedException();
         }
 
         public void Delete(IdType id)
@@ -29,32 +25,17 @@ namespace CatShelter.Repository
         {
             return _context.Cats;
         }
-
         public Cat? GetById(IdType id)
         {
             return _context.Cats
                 .Include(x => x.Carer)
+                .Include(x => x.Adoptions)
                 .FirstOrDefault(x => x.Id == id);
-        }
-
-        public IdType GetRoleId(string role)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IdentityUserRole<IdType>? GetUserRole(IdType userId, IdType roleId)
-        {
-            throw new NotImplementedException();
         }
 
         public void Insert(Cat entity)
         {
             _context.Cats.Add(entity);
-        }
-
-        public void RemoveUserRole(IdType userId, IdType roleId)
-        {
-            throw new NotImplementedException();
         }
 
         public void Save()
