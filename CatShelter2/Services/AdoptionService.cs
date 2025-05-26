@@ -4,8 +4,8 @@ namespace CatShelter.Services
 {
     public class AdoptionService : IAdoptionService
     {
-        readonly AdoptionRepository _repository;
-        public AdoptionService(AdoptionRepository adoptionRepository)
+        readonly IRepository<Adoption> _repository;
+        public AdoptionService(IRepository<Adoption> adoptionRepository)
         {
             _repository = adoptionRepository;
         }

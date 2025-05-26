@@ -6,8 +6,8 @@ namespace CatShelter.Services
 {
     public class UserService : IUserService
     {
-        readonly UserRepository _repository;
-        public UserService(UserRepository repository) 
+        readonly IUserRepository _repository;
+        public UserService(IUserRepository repository) 
         {
             _repository = repository;
         }

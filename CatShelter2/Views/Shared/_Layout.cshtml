@@ -1,9 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer ViewLocalizer
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>@ViewData["Title"] - Cat Shelter Admin</title>
+    <title>@ViewData["Title"] - @ViewLocalizer["Cat Shelter"] Admin</title>
 
     <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet" asp-append-version="true" />
@@ -14,12 +17,15 @@
 <body id="page-top">
     <div id="wrapper">
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-cat"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Cat Shelter</div>
-            </a>
+            <li>
+				<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+					<div class="sidebar-brand-icon rotate-n-15">
+						<i class="fas fa-cat"></i>
+					</div>
+                    <div class="sidebar-brand-text mx-3">@ViewLocalizer["Cat Shelter"]</div>
+				</a>
+            </li>
+
 
             <hr class="sidebar-divider my-0" />
             <li class="nav-item">
@@ -31,21 +37,22 @@
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Cat" asp-action="Index">
                     <i class="fas fa-fw fa-cat"></i>
-                    <span>Cats</span>
+                    <span>@ViewLocalizer["Cats"]</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-controller="User" asp-action="Index">
                     <i class="fas fa-fw fa-user"></i>
-                    <span>Users</span>
+                    <span>@ViewLocalizer["Users"]</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Adoption" asp-action="Index">
                     <i class="fas fa-fw fa-heart"></i>
-                    <span>Adoptions</span>
+                    <span>@ViewLocalizer["Adoptions"]</span>
                 </a>
             </li>
+            <partial name="_LoginPartial" />
         </ul>
 
         <div id="content-wrapper" class="d-flex flex-column">
@@ -68,6 +75,7 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+
 
     <script src="~/vendor/jquery/jquery.min.js" asp-append-version="true"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>

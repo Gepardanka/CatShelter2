@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CatShelter.Repository
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _context;
 
@@ -31,7 +31,10 @@ namespace CatShelter.Repository
 
         public User? GetById(IdType id)
         {
-            var user = _context.Users.FirstOrDefault(x => x.Id == id);
+            var user = _context.Users
+                .Include(x => x.Adoptions)
+                .Include(x => x.CaredForCats)
+                .FirstOrDefault(x => x.Id == id);
             return user;
         }
 

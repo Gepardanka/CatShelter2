@@ -5,8 +5,8 @@ namespace CatShelter.Services
 {
     public class CatService : ICatService
     {
-        readonly CatRepository _repository;
-        public CatService(CatRepository repository)
+        readonly IRepository<Cat> _repository;
+        public CatService(IRepository<Cat> repository)
         {
             _repository = repository;
         }
