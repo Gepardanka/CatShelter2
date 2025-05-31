@@ -38,7 +38,9 @@
             @Html.DisplayNameFor(model => model.Carer)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Carer.Id)
+            <a asp-controller="Cat" asp-action="Details" asp-route-id="@Model.Carer?.Id">
+                @Model.Carer?.Email
+            </a>
         </dd>
     </dl>
 </div>

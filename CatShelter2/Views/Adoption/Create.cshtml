@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>AdoptionViewModel</h4>
+<h4>CreateViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,7 +15,7 @@
             <div class="form-group">
                 <label asp-for="CatId" class="control-label"></label>
                 <select asp-for="CatId" class ="form-control">
-                    @foreach(var item in Model.AvaliableCats)
+                    @foreach(var item in Model.AvailableCats)
                     {
                         <option value="@item.Id">@item.Name</option>
                     }
@@ -24,7 +24,7 @@
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
                 <select asp-for="UserId" class="form-control">
-                    @foreach (var item in Model.AvaliableUsers)
+                    @foreach (var item in Model.AvailableUsers)
                     {
                         <option value="@item.Id">@item.Email</option>
                     }

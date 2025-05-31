@@ -13,8 +13,8 @@ namespace CatShelter.ViewModels.AdoptionViewModels
         public UserViewModel? User { get; set; }
         public DateOnly Date { get; set; }
         public Models.AdoptionType AdoptionType { get; set; }
-        public required List<CatList> AvaliableCats { get; set; }
-        public required List<UserList> AvaliableUsers { get; set; }
+        public required List<CatList> AvailableCats { get; set; }
+        public required List<UserList> AvailableUsers { get; set; }
     }
     public class CatList
     {

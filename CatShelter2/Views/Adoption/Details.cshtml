@@ -14,13 +14,17 @@
             @Html.DisplayNameFor(model => model.Cat)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cat.Id)
+            <a asp-controller="Cat" asp-action="Details" asp-route-id="@Model.Cat?.Id">
+                @Model.Cat?.Name
+            </a>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.User)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
+            <a asp-controller="Cat" asp-action="Details" asp-route-id="@Model.User?.Id">
+                @Model.User?.Email
+            </a>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Date)

@@ -33,7 +33,8 @@ namespace CatShelter.Controllers{
         {
             var cat = _catService.GetById(id);
             if (cat == null) { return NotFound(); }
-            return View(new CatViewModel {
+            return View(new CatViewModel
+            {
                 Id = cat.Id,
                 Adoptions = cat.Adoptions.Select(x => new CatShelter.ViewModels.AdoptionViewModels.AdoptionViewModel
                 {
@@ -43,12 +44,12 @@ namespace CatShelter.Controllers{
                     AdoptionType = x.AdoptionType
                 }).ToList(),
                 ArriveDate = cat.ArriveDate,
-                Carer = cat.Carer == null? null :
+                Carer = cat.Carer == null ? null :
                     new ViewModels.UserViewModels.UserViewModel
-                {
-                    Id = cat.Carer.Id,
-                    Email = cat.Carer.Email,
-                },
+                    {
+                        Id = cat.Carer.Id,
+                        Email = cat.Carer.Email!,
+                    },
                 CarerId = cat.CarerId,
                 Name = cat.Name,
                 Picture = cat.Picture,
@@ -58,17 +59,12 @@ namespace CatShelter.Controllers{
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.CarerId = _userService.GetEmployees().Select(x => new SelectListItem
-            {
-                Value = x.Id.ToString(),
-                Text = x.Email,
-            }).ToList();
-            return View();
+            return View(ModelToCreateViewModel(null));
         }
         [HttpPost]
-        public IActionResult Create(CatViewModel catViewModel)
+        public IActionResult Create(CreateViewModel createViewModel)
         {
-            var cat = catViewModel.Adapt<Cat>();
+            var cat = CreateViewModelToModel(createViewModel);
             _catService.Insert(cat);
             return Redirect($"/cat/details/{cat.Id}");
         }
@@ -77,12 +73,12 @@ namespace CatShelter.Controllers{
         {
             var cat = _catService.GetById(id);
             if (cat == null) { return NotFound(); }
-            return View(cat.Adapt<CatViewModel>());
+            return View(ModelToCreateViewModel(cat));
         }
         [HttpPost]
-        public IActionResult Edit(CatViewModel catViewModel)
+        public IActionResult Edit(CreateViewModel createViewModel)
         {
-            var cat = catViewModel.Adapt<Cat>();
+            var cat = CreateViewModelToModel(createViewModel);
             _catService.Update(cat);
             return Redirect($"/cat/details/{cat.Id}");
         }
@@ -91,6 +87,46 @@ namespace CatShelter.Controllers{
         {
             _catService.Delete(id);
             return Redirect("/cat");
+        }
+        private CreateViewModel ModelToCreateViewModel(Cat? model)
+        {
+            var viewModel = new CreateViewModel
+            {
+                AvailableCarers = _userService.GetEmployees().Select(x => new CarerList
+                {
+                    Id = x.Id,
+                    Email = x.Email!,
+                }).ToList(),
+            };
+            if (model == null) return viewModel;
+            viewModel.Id = model.Id;
+            viewModel.ArriveDate = model.ArriveDate;
+            viewModel.Name = model.Name;
+            viewModel.YearOfBirth = model.YearOfBirth;
+            viewModel.Picture = model.Picture;
+            viewModel.CarerId = model.CarerId;
+            viewModel.Carer = model.Carer == null ? null : new ViewModels.UserViewModels.UserViewModel
+            {
+                Id = model.Carer.Id,
+                Email = model.Carer.Email!
+            };
+            return viewModel;
+        }
+        private Cat CreateViewModelToModel(CreateViewModel createViewModel)
+        {
+            return new Cat
+            {
+                Id = createViewModel.Id,
+                Name = createViewModel.Name,
+                YearOfBirth = createViewModel.YearOfBirth,
+                Picture = createViewModel.Picture,
+                ArriveDate = createViewModel.ArriveDate,
+                CarerId = createViewModel.CarerId,
+                Carer = createViewModel.Carer == null ? null : new User
+                {
+                    Id = createViewModel.Carer.Id,
+                }
+            };
         }
     }
 }
