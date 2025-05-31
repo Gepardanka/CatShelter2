@@ -23,7 +23,7 @@
     @foreach(var item in Model.Cats)
     {
         <div class="card card-margin" style="width: 18rem;">
-            <img src="https://i.pinimg.com/236x/76/83/13/768313f932ade490a9f56587978335c7.jpg" class="card-img-top" alt="Cute cat picture">
+            <img src="@item.Picture" class="card-img-top" alt="Cute cat picture">
 		<div class="card-body">
 			<h5 class="card-title">@item.Name</h5>
 			<p class="card-text">Age: @(DateTime.Now.Year - item.YearOfBirth)</p>

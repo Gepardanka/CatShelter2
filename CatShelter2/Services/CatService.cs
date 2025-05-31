@@ -16,7 +16,7 @@ namespace CatShelter.Services
             _repository.Save();
         }
 
-        public IQueryable<Cat> GetAll()
+        public IEnumerable<Cat> GetAll()
         {
             return _repository.GetAll();
         }

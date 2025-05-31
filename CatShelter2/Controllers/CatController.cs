@@ -3,26 +3,20 @@ using CatShelter.Services;
 using CatShelter.ViewModels.CatViewModels;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Localization;
 namespace CatShelter.Controllers{
     public class CatController : Controller
     {
         readonly ICatService _catService;
         readonly IUserService _userService;
-        readonly IStringLocalizer<CatController> _stringLocalizer;
-        public CatController(ICatService service, IUserService userService, IStringLocalizer<CatController> stringLocalizer)
+        public CatController(ICatService service, IUserService userService)
         {
             _catService = service;
             _userService = userService;
-            _stringLocalizer = stringLocalizer;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            System.Console.WriteLine(_stringLocalizer["Hello"]);
-
             return View(new IndexViewModel
             {
                 Cats = _catService.GetAll().Select(x => x.Adapt<CatViewModel>()).ToList()

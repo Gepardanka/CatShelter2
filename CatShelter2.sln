@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174 d17.12
+VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatShelter2", "CatShelter2\CatShelter2.csproj", "{5C4BED13-45A6-4B44-B4CB-F5178D12EF89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCatShelter", "TestCatShelter\TestCatShelter.csproj", "{AED32188-3AC6-4661-998A-5C2F4F024B8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{5C4BED13-45A6-4B44-B4CB-F5178D12EF89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C4BED13-45A6-4B44-B4CB-F5178D12EF89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C4BED13-45A6-4B44-B4CB-F5178D12EF89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AED32188-3AC6-4661-998A-5C2F4F024B8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AED32188-3AC6-4661-998A-5C2F4F024B8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AED32188-3AC6-4661-998A-5C2F4F024B8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AED32188-3AC6-4661-998A-5C2F4F024B8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1DA208EB-A0C4-42EB-B233-C9E52CF2AE03}
 	EndGlobalSection
 EndGlobal

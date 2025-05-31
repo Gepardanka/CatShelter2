@@ -10,7 +10,7 @@ namespace CatShelter.Models
         public string Name { get; set; } = "";
         public int YearOfBirth { get; set; }
         public DateOnly ArriveDate { get; set; }
-        public string Picture { get; set; } = "";
+        public string? Picture { get; set; }
 
         [ForeignKey("User")]
         public IdType? CarerId { get; set; }

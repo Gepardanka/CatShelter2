@@ -4,7 +4,7 @@ namespace CatShelter.Services
 {
     public interface ICatService
     {
-        IQueryable<Cat> GetAll();
+        IEnumerable<Cat> GetAll();
         Cat? GetById(IdType id);
         void Insert(Cat cat);
         void Update(Cat cat);
